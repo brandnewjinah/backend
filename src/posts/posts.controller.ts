@@ -1,17 +1,14 @@
 import * as express from "express";
 import Post from "./posts.interface";
+import Controller from "../interface/controller.interface"
+import postModel from "./posts.model"
 
-class PostsController {
+class PostsController implements Controller {
     public path = "/posts";
     public router = express.Router();
 
-    private posts: Post[] = [
-        {
-            author: "Marcin",
-            content: "abcced",
-            title: "Lorem Ipsum",
-        }
-    ]
+
+    private posts = postModel;
 
     constructor() {
         this.initializeRoutes();
@@ -26,11 +23,13 @@ class PostsController {
     }
 
     public getAllPosts = (request: express.Request, response: express.Response) => {
-
+        // response.send(this.posts);
     }
 
     public createAPost = (request: express.Request, response: express.Response) => {
-
+        // const post: Post = request.body;
+        // this.posts.push(post);
+        // response.send(post);
     }
 
     public getAPost = (request: express.Request, response: express.Response) => {

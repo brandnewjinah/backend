@@ -1,21 +1,24 @@
 import * as bodyParser from "body-parser";
 import * as express from "express";
+import * as mongoose from "mongoose";
+import Controller from "./posts/posts.interface"
 
 class App {
     public app: express.Application;
-    public port: number;
 
-    constructor(controllers, port) {
+
+    constructor(controllers) {
         this.app = express();
-        this.port = port;
 
+
+        this.connectToTheDatabase();
         this.initializeMiddlewares();
         this.initializeControllers(controllers)
     }
 
     public listen() {
-        this.app.listen(this.port, () => {
-            console.log(`App listening on the port ${this.port}`);
+        this.app.listen(process.env.PORT, () => {
+            console.log(`App listening on the port ${process.env.PORT}`);
         })
     }
 
@@ -28,6 +31,18 @@ class App {
         controllers.forEach((controller) => {
             this.app.use('/', controller.router);
         })
+    }
+
+    private connectToTheDatabase() {
+
+        const dbOptions = {
+            useUnifiedTopology: true,
+            useNewUrlParser: true
+        }
+
+        mongoose.connect(process.env.MONGODB_ADDRESS, dbOptions)
+        .then(() => console.log("db connected"))
+        .catch(e => console.log(e))
     }
 }
 
