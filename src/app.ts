@@ -8,6 +8,9 @@ class App {
     constructor(controllers, port) {
         this.app = express();
         this.port = port;
+
+        this.initializeMiddlewares();
+        this.initializeControllers(controllers)
     }
 
     public listen() {
@@ -19,6 +22,12 @@ class App {
     private initializeMiddlewares() {
         this.app.use(bodyParser.json());
         this.app.use(bodyParser.urlencoded({extended: false}))
+    }
+
+    private initializeControllers(controllers) {
+        controllers.forEach((controller) => {
+            this.app.use('/', controller.router);
+        })
     }
 }
 
